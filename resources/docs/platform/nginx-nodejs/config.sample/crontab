@@ -1,2 +1,0 @@
-* * * * * cd /var/www && node schedule-script.js >> /dev/stdout 2>&1
-
