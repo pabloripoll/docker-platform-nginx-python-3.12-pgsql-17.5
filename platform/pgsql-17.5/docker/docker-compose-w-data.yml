@@ -1,0 +1,23 @@
+services:
+
+  pgsql:
+    image: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}:${COMPOSE_PROJECT_IMGK}
+    pull_policy: never
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}
+    ports:
+      - ${COMPOSE_PROJECT_PORT}:5432
+    volumes:
+      - ../data:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: ${COMPOSE_PROJECT_MEM}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    tty: true
+    restart: unless-stopped

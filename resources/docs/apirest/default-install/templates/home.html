@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Python HTML</title>
+    <link rel="icon" type="image/x-icon" href="https://www.python.org/static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Python HTML">
+    <style>
+    :root {
+        color-scheme: light dark;
+        --light-bg: ghostwhite;
+        --light-color: darkslategray;
+        --light-code: rgb(34 112 177);
+        --dark-bg: rgb(30, 30, 30);
+        --dark-color: ghostwhite;
+        --dark-code: rgb(252 209 42);
+    }
+    * {
+        background-color: light-dark(var(--light-bg), var(--dark-bg));
+        color: light-dark(var(--light-color), var(--dark-color));
+    }
+    body {
+        display: inline-block;
+        margin: 0px 5%;
+        text-align: center;
+        width: 90%;
+    }
+    span {
+        color: light-dark(var(--light-code), var(--dark-code));
+    }
+    .python-logo {
+        width: 250px; margin: 40px auto 10px auto;
+    }
+    .python-logo img {
+        width: 100%;
+    }
+    </style>
+</head>
+<body>
+    <div class="python-logo">
+        <img src="/static/images/python-svgrepo-com.svg" alt="Python Logo">
+    </div>
+    <header>
+        <h1>PLATFORM <span>API REST</span> - Python {{ python_version }} ({{ platform_name }})</h1>
+    </header>
+    <p>Container is running successfully and serving plain <code>main.py</code> script with <span>HTML5</span> via FastAPI.</p>
+    {% if dbstatus %}
+        <p>Database container status: <b style="color:rgb(0, 209, 59)">POSTGRES database successfully connected</b>.</p>
+    {% else %}
+        <p>Database container status: <b style="color:red">POSTGRES connection error:</b> {{ dbstatus_message }}.</p>
+    {% endif %}
+</body>
+</html>
