@@ -35,3 +35,5 @@ resources/docs/apirest/project/*
 platform/pgsql-17/data
 apirest/*
 !apirest/.gitignore
+resources/docs/webapp/project/*
+!resources/docs/webapp/project/.gitignore
