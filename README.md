@@ -491,6 +491,51 @@ Contributions are very welcome! Please open issues or submit PRs for improvement
 ## License
 
 This project is open-sourced under the [MIT license](LICENSE).
+<br><br>
+
+## Python Web Framework Comparison
+
+### Feature Comparison
+
+| Feature | FastAPI | Django | Flask |
+|---------|---------|--------|-------|
+| Learning Curve | Easy | Steep | Easy |
+| Built-in Features | Minimal | Extensive | Minimal |
+| Performance | Very Fast | Moderate | Moderate |
+| Async Support | Native | Yes (3.1+) | Limited |
+| API Documentation | Auto (Swagger) | via drf-spectacular | via Flasgger |
+| Flexibility | High | Moderate | Very High |
+| Best For | Modern APIs | Full apps | Custom APIs |
+
+### Additional Considerations
+
+| Feature | FastAPI | Django | Flask |
+|---------|---------|--------|-------|
+| Type Hints | Required (Pydantic) | Optional | Optional |
+| Data Validation | Built-in (Pydantic) | DRF Serializers | Marshmallow |
+| ORM | External (SQLAlchemy) | Built-in (Django ORM) | External (SQLAlchemy) |
+| Migrations | Alembic | Built-in | Flask-Migrate (Alembic) |
+| Admin Panel | No | Built-in | External (Flask-Admin) |
+| Maturity | New (2018) | Very Mature (2005) | Mature (2010) |
+| Community | Growing Fast | Very Large | Large |
+| Package Count | Fewer | Most | Many |
+
+### For Your Use Case (JWT REST API)
+
+**FastAPI** ⭐ Recommended
+- Modern, fast, automatic API documentation
+- Native async support
+- Best developer experience for REST APIs
+
+**Django**
+- Best if you need admin panel and user management UI
+- Batteries-included approach
+- Overkill for simple stateless APIs
+
+**Flask**
+- Maximum control and flexibility
+- Lightweight, build exactly what you need
+- More manual setup required
 
 <!-- FOOTER -->
 <br>
