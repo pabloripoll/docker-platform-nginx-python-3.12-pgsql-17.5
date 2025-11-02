@@ -72,7 +72,7 @@ Several options besides Uvicorn as common ASGI Servers for FastAPI:
  - Supports HTTP/2, QUIC, and WebSockets; good alternative.
  - Install: pip install hypercorn
  - Run: hypercorn main:app --bind 0.0.0.0:8080
-3. Daphne
+3. **Daphne**
  - Created for Django Channels, but supports any ASGI app.
  - Install: pip install daphne
  - Run: daphne -b 0.0.0.0 -p 8080 main:app
