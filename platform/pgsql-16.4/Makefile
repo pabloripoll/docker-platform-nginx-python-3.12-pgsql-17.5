@@ -21,7 +21,7 @@ endif
 
 include ../../.env
 
-DOCKER_PLTF="POSTGRES 17.5"
+DOCKER_PLTF="POSTGRES 16.4"
 DOCKER_LEAD=$(PROJECT_LEAD)
 DOCKER_CNET=$(PROJECT_CNET)
 DOCKER_HOST=$(PROJECT_HOST)
@@ -45,11 +45,6 @@ ROOT_DIR=$(CURRENT_DIR)
 DOCKER_CONTAINER:=$(addsuffix -$(DOCKER_CAAS), $(DOCKER_LEAD))
 DOCKER_COMPOSE_RUN=$(DOCKER_COMPOSE) run --rm
 DOCKER_EXEC_SSH=$(DOCKER) exec -it $(DOCKER_CONTAINER) sh
-
-APPLICATION_UPDATE=''
-APPLICATION_INSTALL=''
-APPLICATION_INSTALL_BASE=''
-APPLICATION_INSTALL_PACKAGES=''
 
 # -------------------------------------------------------------------------------------------------
 #  Help
@@ -139,7 +134,7 @@ start: ## starts the container and put on running
 stop: ## stops the running container but data won't be destroyed
 	cd docker && $(DOCKER_COMPOSE) stop
 
-restart: ## starts the running container
+restart: ## restarts the running container
 	cd docker && $(DOCKER) restart $(DOCKER_CONTAINER)
 
 clear: ## removes container from Docker running containers
@@ -156,3 +151,38 @@ dev: ## sets a development enviroment
 
 network:
 	cd docker && $(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.network.yml up -d
+
+# -------------------------------------------------------------------------------------------------
+#  Testing Database
+# -------------------------------------------------------------------------------------------------
+
+.PHONY: test-up test-down
+
+test-up: ## creates a side database for testing porpuses
+	$(DOCKER) exec -it $(DATABASE_CONTAINER) sh -c 'dropdb -f $(DATABASE_NAME)_testing -U "$(DATABASE_USER)"; createdb $(DATABASE_NAME)_testing -U "$(DATABASE_USER)"';
+
+test-down: ## drops the side testing database
+	$(DOCKER) exec -it $(DATABASE_CONTAINER) sh -c 'dropdb -f $(DATABASE_NAME)_testing -U "$(DATABASE_USER)";';
+
+# -------------------------------------------------------------------------------------------------
+#  PostgreSQL | directory path is defined in root .env file, e.g.: ./../../resources/database/
+# -------------------------------------------------------------------------------------------------
+
+.PHONY: sql-install sql-replace sql-backup sql-remote copy-remote
+
+sql-install: ## migrates sql file with schema / data into the container main database to init a project
+	$(DOCKER) exec -i $(DATABASE_CONTAINER) sh -c 'psql -d $(DATABASE_NAME) -U "$(DATABASE_USER)"' < $(ROOT_DIR)$(DATABASE_PATH)$(DATABASE_INIT)
+	echo ${C_YEL}"$(PROJECT_NAME) DATABASE"${C_END}" has been copied to container from "${C_BLU}"$(DATABASE_PATH)$(DATABASE_INIT)"${C_END}
+
+sql-replace: ## replaces the container main database with the latest database .sql backup file
+	$(DOCKER) exec -i $(DATABASE_CONTAINER) sh -c 'psql -d $(DATABASE_NAME) -U "$(DATABASE_USER)"' < $(ROOT_DIR)$(DATABASE_PATH)$(DATABASE_BACK)
+	echo ${C_YEL}"$(PROJECT_NAME) DATABASE"${C_END}" has been replaced from "${C_BLU}"$(DATABASE_PATH)$(DATABASE_BACK)"${C_END}
+
+sql-backup: ## copies the container main database as backup into a .sql file
+	[ -d .$(DATABASE_PATH)$(DATABASE_BACK) ] || touch .$(DATABASE_PATH)$(DATABASE_BACK)
+	$(DOCKER) exec $(DATABASE_CONTAINER) sh -c 'pg_dump -d $(DATABASE_NAME) -U "$(DATABASE_USER)"' > $(ROOT_DIR)$(DATABASE_PATH)$(DATABASE_BACK)
+	echo ${C_YEL}"$(PROJECT_NAME) DATABASE"${C_END}" backup has been created at "${C_BLU}"$(DATABASE_PATH)$(DATABASE_BACK)"${C_END}
+
+sql-drop: ## drops the container main database but recreates the database without schema as a reset action
+	$(DOCKER) exec -i $(DATABASE_CONTAINER) sh -c 'dropdb -f $(DATABASE_NAME) -U "$(DATABASE_USER)"; createdb $(DATABASE_NAME) -U "$(DATABASE_USER)"'
+	echo ${C_YEL}"$(PROJECT_NAME) DATABASE"${C_END}" in container "${C_YEL}"$(DATABASE_CONTAINER)"${C_END}" has been deleted."

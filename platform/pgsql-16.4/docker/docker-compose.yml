@@ -1,6 +1,6 @@
 services:
 
-  pgsql:
+  be-pgsql:
     image: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}:${COMPOSE_PROJECT_IMGK}
     pull_policy: never
     build:

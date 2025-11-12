@@ -1,6 +1,6 @@
 services:
 
-  pgsql:
+  be-pgsql:
     networks:
       net: {}
 
