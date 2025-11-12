@@ -237,11 +237,17 @@ mailhog-destroy: ## destroys completly the broker container
 # -------------------------------------------------------------------------------------------------
 .PHONY: repo-flush repo-commit
 
-repo-flush: ## clears local git repository cache specially for updating .gitignore on local IDE
-	git rm -rf --cached .; git add .; git commit -m "fix: cache cleared for untracked files"
+repo-flush: ## echoes clearing commands for git repository cache on local IDE and sub-repository tracking remove
+	echo ${C_YEL}"Clear repository for untracked files:"${C_END}
+	echo ${C_YEL}"$$"${C_END}" git rm -rf --cached .; git add .; git commit -m \"maint: cache cleared for untracked files\""
+	echo ""
+	echo ${C_YEL}"Platform repository against REST API repository:"${C_END}
+	echo ${C_YEL}"$$"${C_END}" git rm -r --cached -- \"apirest/*\" \":(exclude)apirest/.gitkeep\""
 
 repo-commit: ## echoes common git commands
-	echo "git add . && git commit -m \"feat: ... \" && git push -u origin [branch]"
+	echo ${C_YEL}"Common commiting commands:"${C_END}
+	echo ${C_YEL}"$$"${C_END}" git add . && git commit -m \"feat: ... \""
+	echo ""
 	echo ${C_YEL}"For fixing pushed commit comment:"${C_END}
-	echo "git commit --amend"
-	echo "git push --force origin [branch]"
+	echo ${C_YEL}"$$"${C_END}" git commit --amend"
+	echo ${C_YEL}"$$"${C_END}" git push --force origin [branch]"
