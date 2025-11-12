@@ -1,0 +1,23 @@
+services:
+
+  mailer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "mailhog-alpine:22"
+    container_name: "${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_NAME}"
+    ports:
+      - "${COMPOSE_PROJECT_PORT:-1025}:1025"     # SMTP port — send your app mails here
+      - "${COMPOSE_PROJECT_APP_PORT:-8025}:8025" # Web UI + API
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: ${COMPOSE_PROJECT_MEM} # On Docker Swarm, move resource limits into 'deploy.resources.limits'
+    environment:
+      - MH_SMTP_BIND_ADDR=0.0.0.0:1025
+      - MH_API_BIND_ADDR=0.0.0.0:8025
+    command: ["mailhog", "-smtp-bind-addr=0.0.0.0:1025", "-api-bind-addr=0.0.0.0:8025"]
+    volumes:
+      - ./data/:/var/lib/mailhog/   # NOTE: MailHog stores messages in memory by default; this dir is present if you add a custom storage backend
+      - ./log/:/var/log/mailhog

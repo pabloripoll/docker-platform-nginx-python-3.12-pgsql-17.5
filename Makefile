@@ -184,6 +184,55 @@ db-sql-drop: ## drops the container main database but recreates the database wit
 	cd platform/$(DATABASE_PLTF) && $(MAKE) sql-drop
 
 # -------------------------------------------------------------------------------------------------
+#  Mailer Service
+# -------------------------------------------------------------------------------------------------
+.PHONY: mailhog-hostcheck mailhog-info mailhog-set mailhog-create mailhog-network mailhog-ssh mailhog-start mailhog-stop mailhog-destroy
+
+mailhog-hostcheck: ## shows this project ports availability on local machine for broker container
+	cd platform/$(MAILER_PLTF) && $(MAKE) port-check
+
+mailhog-info: ## shows the broker docker related information
+	cd platform/$(MAILER_PLTF) && $(MAKE) info
+
+mailhog-set: ## sets the broker enviroment file to build the container
+	cd platform/$(MAILER_PLTF) && $(MAKE) env-set
+
+mailhog-create: ## creates the broker container from Docker image
+	cd platform/$(MAILER_PLTF) && $(MAKE) build up
+
+mailhog-network: ## creates the broker container network - execute this recipe first before others
+	$(MAKE) mailhog-stop
+	cd platform/$(MAILER_PLTF) && $(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.network.yml up -d
+
+mailhog-ssh: ## enters the broker container shell
+	cd platform/$(MAILER_PLTF) && $(MAKE) ssh
+
+mailhog-start: ## starts the broker container running
+	cd platform/$(MAILER_PLTF) && $(MAKE) start
+
+mailhog-stop: ## stops the broker container but its assets will not be destroyed
+	cd platform/$(MAILER_PLTF) && $(MAKE) stop
+
+mailhog-restart: ## restarts the running broker container
+	cd platform/$(MAILER_PLTF) && $(MAKE) restart
+
+mailhog-destroy: ## destroys completly the broker container
+	echo ${C_RED}"Attention!"${C_END};
+	echo ${C_YEL}"You're about to remove the "${C_BLU}"$(MAILER_PROJECT)"${C_END}" container and delete its image resource."${C_END};
+	@echo -n ${C_RED}"Are you sure to proceed? "${C_END}"[y/n]: " && read response && if [ $${response:-'n'} != 'y' ]; then \
+        echo ${C_GRN}"K.O.! container has been stopped but not destroyed."${C_END}; \
+    else \
+		cd platform/$(MAILER_PLTF) && $(MAKE) stop clear destroy; \
+		echo -n ${C_GRN}"Do you want to clear DOCKER cache? "${C_END}"[y/n]: " && read response && if [ $${response:-'n'} != 'y' ]; then \
+			echo ${C_YEL}"The following command is delegated to be executed by user:"${C_END}; \
+			echo "$$ $(DOCKER) system prune"; \
+		else \
+			$(DOCKER) system prune; \
+			echo ${C_GRN}"O.K.! DOCKER cache has been cleared up."${C_END}; \
+		fi \
+	fi
+
+# -------------------------------------------------------------------------------------------------
 #  Repository Helper
 # -------------------------------------------------------------------------------------------------
 .PHONY: repo-flush repo-commit

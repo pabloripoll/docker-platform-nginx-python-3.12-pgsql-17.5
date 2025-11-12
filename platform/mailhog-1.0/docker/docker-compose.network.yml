@@ -1,0 +1,10 @@
+services:
+
+  mailer:
+    networks:
+      net: {}
+
+networks:
+  net:
+    driver: bridge
+    name: ${COMPOSE_PROJECT_LEAD}-${COMPOSE_PROJECT_CNET}
