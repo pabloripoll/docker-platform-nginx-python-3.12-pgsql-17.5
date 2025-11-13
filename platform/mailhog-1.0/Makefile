@@ -21,7 +21,7 @@ endif
 
 include ../../.env
 
-DOCKER_PLTF="MAILHOG"
+DOCKER_PLTF="MAILHOG 1.0"
 DOCKER_LEAD=$(PROJECT_LEAD)
 DOCKER_CNET=$(PROJECT_CNET)
 DOCKER_HOST=$(PROJECT_HOST)
@@ -88,11 +88,11 @@ else
 	COMPOSE_PROJECT_MEM=\"$(DOCKER_CAAS_MEM)\"\r\n\
 	COMPOSE_PROJECT_SWAP=\"$(DOCKER_CAAS_SWAP)\"\r\n\
 	COMPOSE_PROJECT_APP_PORT=\"$(DOCKER_APP_PORT)\"" > ./docker/.env; \
-	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" "${C_YEL}$(DOCKER_PLTF)${C_END}" - "${C_YEL}"docker-compose.yml"${C_END}" .env file "${C_GRN}"has been set."${C_END};
-	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" "${C_YEL}$(DOCKER_PLTF)${C_END}" - Container: "${C_GRN}$(DOCKER_CONTAINER)${C_END}
-	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" "${C_YEL}$(DOCKER_PLTF)${C_END}" - Max. memory usage: "${C_GRN}$(DOCKER_CAAS_MEM)${C_END}" - swap: "${C_GRN}$(DOCKER_CAAS_SWAP)${C_END}
-	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" "${C_YEL}$(DOCKER_PLTF)${C_END}" - SMTP is served at: http://"${C_GRN}$(word 1,$(shell hostname -I)):$(DOCKER_PORT)${C_END}
-	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" "${C_YEL}$(DOCKER_PLTF)${C_END}" - APP/API is served at: http://127.0.0.1:"${C_GRN}$(DOCKER_APP_PORT)${C_END}
+	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" MAIL SERVICE "${C_YEL}$(DOCKER_PLTF)${C_END}" - "${C_YEL}"docker-compose.yml"${C_END}" .env file "${C_GRN}"has been set."${C_END};
+	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" MAIL SERVICE "${C_YEL}$(DOCKER_PLTF)${C_END}" - Container: "${C_GRN}$(DOCKER_CONTAINER)${C_END}
+	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" MAIL SERVICE "${C_YEL}$(DOCKER_PLTF)${C_END}" - Max. memory usage: "${C_GRN}$(DOCKER_CAAS_MEM)${C_END}" - swap: "${C_GRN}$(DOCKER_CAAS_SWAP)${C_END}
+	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" MAIL SERVICE "${C_YEL}$(DOCKER_PLTF)${C_END}" - SMTP is served at: http://"${C_GRN}$(word 1,$(shell hostname -I)):$(DOCKER_PORT)${C_END}
+	echo ${C_BLU}"$(PROJECT_NAME)"${C_END}" MAIL SERVICE "${C_YEL}$(DOCKER_PLTF)${C_END}" - APP/API is served at: http://127.0.0.1:"${C_GRN}$(DOCKER_APP_PORT)${C_END}
 endif
 
 # -------------------------------------------------------------------------------------------------
