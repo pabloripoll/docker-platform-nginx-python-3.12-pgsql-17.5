@@ -40,6 +40,7 @@ RUN apk add --no-cache \
   build-base \
   supervisor \
   # Python
+  tzdata \
   python3 \
   py3-pip
 
