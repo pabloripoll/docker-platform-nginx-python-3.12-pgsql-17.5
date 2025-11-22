@@ -51,7 +51,7 @@ Despite Docker’s cross-platform compatibility, for intermediate to advanced so
 
 If you won't use GNU Make, Docker commands will have to be executed from within the `./platform/nginx-python/docker` and `./platform/postgres-16.4/docker` directories, e.g.:
 ```bash
-platform/nginx-python/docker $ sudo docker compose up --build --no-recreate -d
+./platform/nginx-python-3.12/docker $ sudo docker compose up --build --no-recreate -d
 ```
 
 | Dev machine   | Machine's features                                                                            |
@@ -209,6 +209,14 @@ DATABASE_PASS="J4YPuJaieJ35gNAOSQQor87s82q2eUS1"
 DATABASE_PATH="/resources/database/"
 DATABASE_INIT=pgsql-init.sql
 DATABASE_BACK=pgsql-backup.sql
+
+MAILER_PLTF=mailhog-1.0
+MAILER_IMGK=alpine-3.22-mailhog
+MAILER_PORT=7502
+MAILER_CAAS=mp-mailhog-dev
+MAILER_CAAS_MEM=128M
+MAILER_CAAS_SWAP=512M
+MAILER_APP_PORT=7503
 ```
 
 Once this environment file is set, it can be created each container instance's `.env` automatically by using GNU Make:
@@ -391,9 +399,10 @@ Repository directories structure overview:
 │   │   │   └── Dockerfile
 │   │   │
 │   │   └── Makefile
-│   └── postgres-16.4
-│       ├── docker
-│       └── Makefile
+│   ├── postgres-16.4
+│   │   ├── docker
+│   │   └── Makefile
+│   └── mailhog-1.0
 ├── .env
 ├── Makefile
 └── README.md
@@ -537,7 +546,7 @@ This project is open-sourced under the [MIT license](LICENSE).
 | Community | Growing Fast | Very Large | Large |
 | Package Count | Fewer | Most | Many |
 
-### For Your Use Case (JWT REST API)
+### JWT REST API
 
 **FastAPI** ⭐ Recommended
 - Modern, fast, automatic API documentation
